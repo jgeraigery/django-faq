@@ -1,19 +1,31 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
 
 from setuptools import setup, find_packages
 
 
 here = os.path.dirname(__file__)
+version = __import__('faq').get_version()
 
 
 def get_long_desc():
     return open(os.path.join(here, 'README.rst')).read()
 
+if sys.argv[-1] == 'publish':
+    os.system('python setup.py bdist_wheel upload -r natgeo')
+    print("You probably want to also tag the version now:")
+    print("  python setup.py tag")
+    sys.exit()
+elif sys.argv[-1] == 'tag':
+    cmd = "git tag -a %s -m 'version %s';git push --tags" % (version, version)
+    os.system(cmd)
+    sys.exit()
+
 
 setup(
     name='django-faq',
-    version=__import__('faq').get_version().replace(' ', '-'),
+    version=version.replace(' ', '-'),
     description='Frequently Asked Question (FAQ) management for Django apps.',
     url='https://github.com/natgeosociety/django-faq/',
     author='Ben Spaulding',
