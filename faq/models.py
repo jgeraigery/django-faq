@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from builtins import object
 from django.db import models
 from django.conf import settings
 from django.contrib.sites.models import Site
@@ -86,7 +87,7 @@ class FAQBase(models.Model):
 
     objects = OnSiteManager()
 
-    class Meta:
+    class Meta(object):
         abstract = True
         get_latest_by = 'modified'
 

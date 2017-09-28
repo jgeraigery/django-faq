@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from builtins import object
 from django import forms
 
 from faq.models import Question
@@ -8,7 +9,7 @@ from faq.models import Question
 class QuestionForm(forms.ModelForm):
     """A form whose only purpose is to manage fields for the QuestionInline."""
 
-    class Meta:
+    class Meta(object):
         # InlineModelAdmin does not support ``fields``, so if we want to order
         # the fields in an InlineModelAdmin, we must do so with a custom
         # ModelForm. This is not ideal, but at least it gets the job done.
