@@ -5,3 +5,5 @@ dist/
 docs/_build
 MANIFEST
 *.egg-info
+.tox/
+.cache/
