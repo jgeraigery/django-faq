@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
-from faq.views.shallow import TopicListView
-from faq.views.normal import TopicDetailView
-from faq.views.deep import QuestionDetailView
+from faq.views import TopicListView, TopicDetailView, QuestionDetailView
 
 
 # Include these patterns if you want URLs like:
@@ -14,8 +12,7 @@ from faq.views.deep import QuestionDetailView
 #   /faq/topic/question/
 #
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^$', TopicListView.as_view(), name='faq-topic-list'),
     url(
         r'^(?P<slug>[-\w]+)/$',
@@ -25,4 +22,4 @@ urlpatterns = patterns(
         r'^(?P<topic_slug>[-\w]+)/(?P<slug>[-\w]+)/$',
         QuestionDetailView.as_view(),
         name='faq-question-detail'),
-)
+]
