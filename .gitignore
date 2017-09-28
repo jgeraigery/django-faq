@@ -7,3 +7,6 @@ MANIFEST
 *.egg-info
 .tox/
 .cache/
+.coverage
+junit-*.xml
+coverage.xml
