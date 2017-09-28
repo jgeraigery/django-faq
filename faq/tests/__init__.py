@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.contrib.sites.models import Site
 
 from faq.settings import DRAFTED
@@ -11,6 +11,7 @@ from faq.models import Topic, Question, OnSiteManager
 # Test _field_lookups, or just Manager?
 # Test admin actions?
 ##
+
 
 class BaseTestCase(TestCase):
     """"""
@@ -55,13 +56,13 @@ class ManagerTestCase(BaseTestCase):
 class ModelsTestCase(BaseTestCase):
     """"""
 
-    def testManager(self):
+    def test_manager(self):
         # Because of our sublcassing with the models, be certain that the
         # manager is wired up correctly.
         self.assertTrue(isinstance(Topic.objects, OnSiteManager))
         self.assertTrue(isinstance(Question.objects, OnSiteManager))
 
-    def testUnicode(self):
+    def test_unicode(self):
         # Ensure that we don't absent-mindedly change what the `__unicode__()`
         # method returns.
         self.assertEqual(self.topics['new'].__unicode__(),
@@ -69,18 +70,18 @@ class ModelsTestCase(BaseTestCase):
         self.assertEqual(self.questions['new1'].__unicode__(),
             self.questions['new1'].question)
 
-    def testDefaultStatus(self):
+    def test_default_status(self):
         # Items created without choosing a status should be drafted by default.
         self.assertEqual(self.topics['new'].status, DRAFTED)
         self.assertEqual(self.questions['new1'].status, DRAFTED)
 
-    def testSlugOnSave(self):
+    def test_slug_on_save(self):
         # Be sure we are properly creating slugs for questions that are created
         # without them (those created as an inline to a topic).
         self.assertEqual(self.questions['new1'].slug, u'where-am-i')
         self.assertEqual(self.questions['new2'].slug, u'who-are-you')
 
-    def testOrderingOnSave(self):
+    def test_ordering_on_save(self):
         # Be sure we are properly calculating and filling the ordering field
         # when a user leaves it blank.
         self.assertEqual(self.questions['new1'].ordering, 1)
@@ -107,27 +108,9 @@ class ViewsBaseTestCase(BaseTestCase):
         }
 
 
-class ViewsShallowTestCase(ViewsBaseTestCase):
-
-    urls = 'faq.urls.shallow'
-
-    def testTopicDetail(self):
-        # Redirects to a fragment identifier on the topic list.
-        self.assertRedirects(self.responses['topic_detail'],
-            '/#shipping', status_code=301)
-
-    def testQuestionDetail(self):
-        # Redirects to a fragment identifier on the topic list.
-        self.assertRedirects(self.responses['question_detail'],
-            '/#how-much-does-shipping-cost', status_code=301)
-
-
-class ViewsNormalTestCase(ViewsShallowTestCase):
-    """"""
-
-    urls = 'faq.urls.normal'
-
-    def testTopicDetail(self):
+@override_settings(ROOT_URLCONF='faq.urls.normal')
+class ViewsNormalTestCase(ViewsBaseTestCase):
+    def test_topic_detail(self):
         # Does not redirect.
         self.assertEqual(self.responses['topic_detail'].status_code, 200)
         # Check for our extra_context.
@@ -135,18 +118,15 @@ class ViewsNormalTestCase(ViewsShallowTestCase):
         self.assertEqual(list(self.responses['topic_detail'].context['question_list']),
             list(self.topics['published'].questions.published()))
 
-    def testQuestionDetail(self):
+    def test_question_detail(self):
         # Redirects to a fragment identifier on the topic detail.
         self.assertRedirects(self.responses['question_detail'],
             '/shipping/#how-much-does-shipping-cost', status_code=301)
 
 
+@override_settings(ROOT_URLCONF='faq.urls.deep')
 class ViewsDeepTestCase(ViewsNormalTestCase):
-    """"""
-
-    urls = 'faq.urls.deep'
-
-    def testQuestionDetail(self):
+    def test_question_detail(self):
         # Does not redirect.
         self.assertEqual(self.responses['question_detail'].status_code, 200)
         # Check for our extra_context.
