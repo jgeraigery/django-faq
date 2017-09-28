@@ -110,6 +110,10 @@ class ViewsBaseTestCase(BaseTestCase):
 
 @override_settings(ROOT_URLCONF='faq.urls.normal')
 class ViewsNormalTestCase(ViewsBaseTestCase):
+    def test_import_view(self):
+        # This was causing an issue for some reason
+        from faq.views import TopicListView, TopicDetailView, question_detail  # NOQA
+
     def test_topic_detail(self):
         # Does not redirect.
         self.assertEqual(self.responses['topic_detail'].status_code, 200)
