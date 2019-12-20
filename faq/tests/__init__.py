@@ -23,8 +23,8 @@ class BaseTestCase(TestCase):
         # data because we will be testing for the state of something newly
         # created, which the test data does not contain, obviously.
         self.topics = {
-            'new': Site.objects.get_current().faq_topics.create(title=u'Test Topic',
-                slug=u'test-topic'),
+            'new': Site.objects.get_current().faq_topics.create(title='Test Topic',
+                slug='test-topic'),
             'drafted': Topic.objects.get(slug='website'),
             'published': Topic.objects.get(slug='shipping'),
             'removed': Topic.objects.get(slug='black-market-items'),
@@ -32,10 +32,10 @@ class BaseTestCase(TestCase):
         }
 
         self. questions = {
-            'new1': self.topics['new'].questions.create(question=u'Where am I?',
-                answer=u'That is classified.'),
-            'new2': self.topics['new'].questions.create(question=u'Who are you?',
-                answer=u'I cannot say.'),
+            'new1': self.topics['new'].questions.create(question='Where am I?',
+                answer='That is classified.'),
+            'new2': self.topics['new'].questions.create(question='Who are you?',
+                answer='I cannot say.'),
             'drafted': Question.objects.get(slug='in-what-color-box-do-you-ship'),
             'published': Question.objects.get(slug='how-much-does-shipping-cost'),
             'removed': Question.objects.get(slug='what-carrier-do-you-use'),
@@ -78,8 +78,8 @@ class ModelsTestCase(BaseTestCase):
     def test_slug_on_save(self):
         # Be sure we are properly creating slugs for questions that are created
         # without them (those created as an inline to a topic).
-        self.assertEqual(self.questions['new1'].slug, u'where-am-i')
-        self.assertEqual(self.questions['new2'].slug, u'who-are-you')
+        self.assertEqual(self.questions['new1'].slug, 'where-am-i')
+        self.assertEqual(self.questions['new2'].slug, 'who-are-you')
 
     def test_ordering_on_save(self):
         # Be sure we are properly calculating and filling the ordering field
