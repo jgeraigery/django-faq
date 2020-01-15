@@ -62,14 +62,6 @@ class ModelsTestCase(BaseTestCase):
         self.assertTrue(isinstance(Topic.objects, OnSiteManager))
         self.assertTrue(isinstance(Question.objects, OnSiteManager))
 
-    def test_unicode(self):
-        # Ensure that we don't absent-mindedly change what the `__unicode__()`
-        # method returns.
-        self.assertEqual(self.topics['new'].__unicode__(),
-            self.topics['new'].title)
-        self.assertEqual(self.questions['new1'].__unicode__(),
-            self.questions['new1'].question)
-
     def test_default_status(self):
         # Items created without choosing a status should be drafted by default.
         self.assertEqual(self.topics['new'].status, DRAFTED)
