@@ -112,7 +112,7 @@ class Topic(FAQBase):
         verbose_name = _('topic')
         verbose_name_plural = _('topics')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     @models.permalink
@@ -144,7 +144,7 @@ class Question(FAQBase):
         verbose_name = _('question')
         verbose_name_plural = _('questions')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.question
 
     def save(self, *args, **kwargs):
