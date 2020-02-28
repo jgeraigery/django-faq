@@ -74,15 +74,15 @@ class OnSiteManager(models.Manager):
 class FAQBase(models.Model):
     """A model holding information common to Topics and Questions."""
 
-    created = models.DateTimeField(_(u'date created'), auto_now_add=True)
-    modified = models.DateTimeField(_(u'date modified'), auto_now=True)
+    created = models.DateTimeField(_('date created'), auto_now_add=True)
+    modified = models.DateTimeField(_('date modified'), auto_now=True)
     status = models.IntegerField(
-        _(u'status'),
+        _('status'),
         choices=STATUS_CHOICES,
         # TODO: Genericize/fix the help_text.
         db_index=True,
         default=DRAFTED,
-        help_text=_(u'Only objects with "published" '
+        help_text=_('Only objects with "published" '
                     'status will be displayed publicly.'))
 
     objects = OnSiteManager()
@@ -95,24 +95,24 @@ class FAQBase(models.Model):
 class Topic(FAQBase):
     """A topic that a Question can belong to."""
 
-    title = models.CharField(_(u'title'), max_length=255)
-    slug = models.SlugField(_(u'slug'), unique=True, help_text=_(u'Used in \
+    title = models.CharField(_('title'), max_length=255)
+    slug = models.SlugField(_('slug'), unique=True, help_text=_('Used in \
         the URL for the topic. Must be unique.'))
     description = models.TextField(
-        _(u'description'),
+        _('description'),
         blank=True,
-        help_text=_(u'A short description of this topic.'))
+        help_text=_('A short description of this topic.'))
     sites = models.ManyToManyField(
         Site,
-        verbose_name=_(u'sites'),
+        verbose_name=_('sites'),
         related_name='faq_topics')
 
     class Meta(FAQBase.Meta):
         ordering = ('title', 'slug')
-        verbose_name = _(u'topic')
-        verbose_name_plural = _(u'topics')
+        verbose_name = _('topic')
+        verbose_name_plural = _('topics')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     @models.permalink
@@ -123,28 +123,28 @@ class Topic(FAQBase):
 class Question(FAQBase):
     """A frequently asked question."""
 
-    question = models.CharField(_(u'question'), max_length=255)
-    slug = models.SlugField(_(u'slug'), unique=True, help_text=_(u'Used in \
+    question = models.CharField(_('question'), max_length=255)
+    slug = models.SlugField(_('slug'), unique=True, help_text=_('Used in \
         the URL for the Question. Must be unique.'))
-    answer = models.TextField(_(u'answer'))
+    answer = models.TextField(_('answer'))
     topic = models.ForeignKey(
         Topic,
-        verbose_name=_(u'topic'),
+        verbose_name=_('topic'),
         related_name='questions')
     ordering = models.PositiveSmallIntegerField(
-        _(u'ordering'),
+        _('ordering'),
         blank=True,
         db_index=True,
-        help_text=_(u'An integer used to order the question \
+        help_text=_('An integer used to order the question \
             amongst others related to the same topic. If not given this \
             question will be last in the list.'))
 
     class Meta(FAQBase.Meta):
         ordering = ('ordering', 'question', 'slug')
-        verbose_name = _(u'question')
-        verbose_name_plural = _(u'questions')
+        verbose_name = _('question')
+        verbose_name_plural = _('questions')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.question
 
     def save(self, *args, **kwargs):

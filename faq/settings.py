@@ -13,9 +13,9 @@ PUBLISHED = getattr(settings, 'FAQ_PUBLISHED', 2)
 REMOVED = getattr(settings, 'FAQ_REMOVED', 3)
 
 STATUS_CHOICES = (
-    (DRAFTED, _(u'drafted')),
-    (PUBLISHED, _(u'published')),
-    (REMOVED, _(u'removed')),
+    (DRAFTED, _('drafted')),
+    (PUBLISHED, _('published')),
+    (REMOVED, _('removed')),
 )
 STATUS_CHOICES = getattr(settings, 'FAQ_STATUS_CHOICES', STATUS_CHOICES)
 
